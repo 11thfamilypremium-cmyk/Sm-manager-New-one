@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: Sm-manager
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app --workers=2 --threads=4 --timeout=120"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sm-manager-db
+          property: connectionString
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHANNEL_ID
+        sync: false
+      - key: UPI_ID
+        sync: false
+      - key: PAYEE_NAME
+        sync: false
+      - key: DEFAULT_PRICE
+        value: "299"
+      - key: DEFAULT_DURATION_DAYS
+        value: "30"
+      - key: EXPIRY_WARNING_DAYS
+        value: "7"
+      - key: GOOGLE_APPS_SCRIPT_URL
+        sync: false
+      - key: GOOGLE_APPS_SCRIPT_SECRET
+        sync: false
+      - key: CRON_SECRET
+        generateValue: true
+
+databases:
+  - name: sm-manager-db
+    databaseName: sm_manager_db
+    user: sm_manager_user
